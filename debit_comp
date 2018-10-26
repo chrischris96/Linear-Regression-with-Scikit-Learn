@@ -6,15 +6,15 @@ from numpy import set_printoptions
 
 np.set_printoptions(suppress=True)
 
-SK_ID_CURR 					= []
-TARGET						= []
+SK_ID_CURR 				= []
+TARGET					= []
 NAME_CONTRACT_TYPE 			= []
 CODE_GENDER 				= []
 FLAG_OWN_CAR 				= []
 FLAG_OWN_REALTY				= []
 CNT_CHILDREN				= []
 AMT_INCOME_TOTAL			= []
-AMT_CREDIT 					= []
+AMT_CREDIT 				= []
 
 def get_data(filename):
 	with open(filename, 'r') as csvfile:
@@ -64,8 +64,8 @@ res.fit(X_train,Y_train)
 
 
 SK_ID_CURR_1					= []
-TARGET_1						= []
-NAME_CONTRACT_TYPE_1 			= []
+TARGET_1					= []
+NAME_CONTRACT_TYPE_1 				= []
 CODE_GENDER_1 					= []
 FLAG_OWN_CAR_1 					= []
 FLAG_OWN_REALTY_1				= []

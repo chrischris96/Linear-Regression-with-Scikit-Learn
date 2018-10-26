@@ -1,0 +1,122 @@
+import csv
+import numpy as np
+import pandas as pd
+from sklearn import linear_model
+from numpy import set_printoptions
+
+np.set_printoptions(suppress=True)
+
+SK_ID_CURR 					= []
+TARGET						= []
+NAME_CONTRACT_TYPE 			= []
+CODE_GENDER 				= []
+FLAG_OWN_CAR 				= []
+FLAG_OWN_REALTY				= []
+CNT_CHILDREN				= []
+AMT_INCOME_TOTAL			= []
+AMT_CREDIT 					= []
+
+def get_data(filename):
+	with open(filename, 'r') as csvfile:
+		csvFileReader = csv.reader(csvfile)
+		next(csvFileReader)
+		for row in csvFileReader:
+			SK_ID_CURR.append(int(row[0]))
+			TARGET.append(int(row[1]))
+			NAME_CONTRACT_TYPE.append(row[2])
+			CODE_GENDER.append(row[3])
+			FLAG_OWN_CAR.append(row[4])
+			FLAG_OWN_REALTY.append(row[5])
+			CNT_CHILDREN.append(int(row[6]))
+			AMT_INCOME_TOTAL.append(float(row[7]))
+			AMT_CREDIT.append(float(row[8]))
+
+	return
+
+
+get_data('application_train.csv')
+
+a={'Cash loans': 0,'Revolving loans':1,'Y': 0,'N': 1,'M': 0,'F': 1, 'XNA': 0}
+
+NAME_CONTRACT_TYPE 	= [a[k] for k in NAME_CONTRACT_TYPE]
+CODE_GENDER			= [a[k] for k in CODE_GENDER]
+FLAG_OWN_CAR 		= [a[k] for k in FLAG_OWN_CAR]
+FLAG_OWN_REALTY 	= [a[k] for k in FLAG_OWN_REALTY]
+
+
+SK_ID_CURR = np.reshape(SK_ID_CURR, (len(SK_ID_CURR),1))
+TARGET = np.reshape(TARGET, (len(TARGET),1))
+NAME_CONTRACT_TYPE = np.reshape(NAME_CONTRACT_TYPE, (len(NAME_CONTRACT_TYPE),1))
+CODE_GENDER = np.reshape(CODE_GENDER, (len(CODE_GENDER),1))
+FLAG_OWN_CAR = np.reshape(FLAG_OWN_CAR, (len(FLAG_OWN_CAR),1))
+FLAG_OWN_REALTY = np.reshape(FLAG_OWN_REALTY, (len(FLAG_OWN_REALTY),1))
+CNT_CHILDREN = np.reshape(CNT_CHILDREN, (len(CNT_CHILDREN),1))
+AMT_INCOME_TOTAL = np.reshape(AMT_INCOME_TOTAL, (len(AMT_INCOME_TOTAL),1))
+AMT_CREDIT = np.reshape(AMT_CREDIT, (len(AMT_CREDIT),1))
+
+
+X_train = np.c_[NAME_CONTRACT_TYPE, CODE_GENDER, FLAG_OWN_CAR, FLAG_OWN_REALTY, CNT_CHILDREN, AMT_INCOME_TOTAL, AMT_CREDIT]
+Y_train = TARGET
+
+res = linear_model.LinearRegression()
+res.fit(X_train,Y_train)
+
+
+
+SK_ID_CURR_1					= []
+TARGET_1						= []
+NAME_CONTRACT_TYPE_1 			= []
+CODE_GENDER_1 					= []
+FLAG_OWN_CAR_1 					= []
+FLAG_OWN_REALTY_1				= []
+CNT_CHILDREN_1					= []
+AMT_INCOME_TOTAL_1				= []
+AMT_CREDIT_1 					= []
+
+def get_data(filename):
+	with open(filename, 'r') as csvfile:
+		csvFileReader = csv.reader(csvfile)
+		next(csvFileReader)
+		for row in csvFileReader:
+			SK_ID_CURR_1.append(int(row[0]))
+			NAME_CONTRACT_TYPE_1.append(row[1])
+			CODE_GENDER_1.append(row[2])
+			FLAG_OWN_CAR_1.append(row[3])
+			FLAG_OWN_REALTY_1.append(row[4])
+			CNT_CHILDREN_1.append(int(row[5]))
+			AMT_INCOME_TOTAL_1.append(float(row[6]))
+			AMT_CREDIT_1.append(float(row[7]))
+
+	return
+
+
+get_data('application_test.csv')
+
+a={'Cash loans': 0,'Revolving loans':1,'Y': 0,'N': 1,'M': 0,'F': 1, 'XNA': 0}
+
+NAME_CONTRACT_TYPE_1 	= [a[k] for k in NAME_CONTRACT_TYPE_1]
+CODE_GENDER_1			= [a[k] for k in CODE_GENDER_1]
+FLAG_OWN_CAR_1 			= [a[k] for k in FLAG_OWN_CAR_1]
+FLAG_OWN_REALTY_1	 	= [a[k] for k in FLAG_OWN_REALTY_1]
+
+SK_ID_CURR_1 = np.reshape(SK_ID_CURR_1, (len(SK_ID_CURR_1),1))
+TARGET_1 = SK_ID_CURR_1
+NAME_CONTRACT_TYPE_1 = np.reshape(NAME_CONTRACT_TYPE_1, (len(NAME_CONTRACT_TYPE_1),1))
+CODE_GENDER_1 = np.reshape(CODE_GENDER_1, (len(CODE_GENDER_1),1))
+FLAG_OWN_CAR_1 = np.reshape(FLAG_OWN_CAR_1, (len(FLAG_OWN_CAR_1),1))
+FLAG_OWN_REALTY_1 = np.reshape(FLAG_OWN_REALTY_1, (len(FLAG_OWN_REALTY_1),1))
+CNT_CHILDREN_1 = np.reshape(CNT_CHILDREN_1, (len(CNT_CHILDREN_1),1))
+AMT_INCOME_TOTAL_1 = np.reshape(AMT_INCOME_TOTAL_1, (len(AMT_INCOME_TOTAL_1),1))
+AMT_CREDIT_1 = np.reshape(AMT_CREDIT_1, (len(AMT_CREDIT_1),1))
+
+
+X_test = np.c_[NAME_CONTRACT_TYPE_1, CODE_GENDER_1, FLAG_OWN_CAR_1, FLAG_OWN_REALTY_1, CNT_CHILDREN_1, AMT_INCOME_TOTAL_1, AMT_CREDIT_1]
+Y_test = res.predict(X_test)
+
+
+Y_test = np.c_[SK_ID_CURR_1, Y_test]
+
+Y_test = np.asarray(Y_test) 
+np.savetxt("Submission.csv", Y_test, delimiter=",", header="SK_ID_CURR,TARGET")
+
+
